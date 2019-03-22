@@ -188,3 +188,157 @@ func TestFraction_Divide(t *testing.T) {
 		})
 	}
 }
+
+func TestFraction_Greater(t *testing.T) {
+	tests := []struct {
+		args []int64
+		want bool
+	}{
+		{[]int64{2, 4, 1, 4}, true},
+		{[]int64{3, 7, 2, 5}, true},
+		{[]int64{-2, 7, -2, 5}, true},
+		{[]int64{2, 7, -2, 5}, true},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprint(tt.args), func(t *testing.T) {
+			fraction, _ := New(tt.args[0], tt.args[1])
+			otherFraction, _ := New(tt.args[2], tt.args[3])
+
+			if got := fraction.Greater(otherFraction); got != tt.want {
+				t.Errorf("Fraction.Greater() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFraction_Int(t *testing.T) {
+	tests := []struct {
+		args []int64
+		want int
+	}{
+		{[]int64{1, 2}, 0},
+		{[]int64{2, 2}, 1},
+		{[]int64{3, 2}, 1},
+		{[]int64{4, 3}, 1},
+		{[]int64{5, 3}, 1},
+		{[]int64{-5, 3}, -1},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprint(tt.args), func(t *testing.T) {
+			fraction, _ := New(tt.args[0], tt.args[1])
+			if got := fraction.Int(); got != tt.want {
+				t.Errorf("Fraction.Int() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFraction_Int64(t *testing.T) {
+	tests := []struct {
+		args []int64
+		want int64
+	}{
+		{[]int64{1, 2}, 0},
+		{[]int64{2, 2}, 1},
+		{[]int64{3, 2}, 1},
+		{[]int64{4, 3}, 1},
+		{[]int64{5, 3}, 1},
+		{[]int64{-5, 3}, -1},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprint(tt.args), func(t *testing.T) {
+			fraction, _ := New(tt.args[0], tt.args[1])
+			if got := fraction.Int64(); got != tt.want {
+				t.Errorf("Fraction.Int() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFraction_Float32(t *testing.T) {
+	tests := [][]int64{
+		{1, 2},
+		{2, 2},
+		{3, 2},
+		{4, 3},
+		{5, 3},
+		{-5, 3},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprint(tt), func(t *testing.T) {
+			fraction, _ := New(tt[0], tt[1])
+			if got := fraction.Float32(); got != float32(tt[0])/float32(tt[1]) {
+				t.Errorf("Fraction.Float32() = %v", got)
+			}
+		})
+	}
+}
+
+func TestFraction_Float64(t *testing.T) {
+	tests := [][]int64{
+		{1, 2},
+		{2, 2},
+		{3, 2},
+		{4, 3},
+		{5, 3},
+		{-5, 3},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprint(tt), func(t *testing.T) {
+			fraction, _ := New(tt[0], tt[1])
+			if got := fraction.Float64(); got != float64(tt[0])/float64(tt[1]) {
+				t.Errorf("Fraction.Float64() = %v", got)
+			}
+		})
+	}
+}
+
+func TestFraction_Positive(t *testing.T) {
+	tests := []struct {
+		args []int64
+		want bool
+	}{
+		{[]int64{1, 2}, true},
+		{[]int64{-1, 2}, false},
+		{[]int64{-1, -2}, true},
+		{[]int64{0, -2}, true},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprint(tt.args), func(t *testing.T) {
+			fraction, _ := New(tt.args[0], tt.args[1])
+			if got := fraction.Positive(); got != tt.want {
+				t.Errorf("Fraction.Positive() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFraction_Equal(t *testing.T) {
+	tests := []struct {
+		args []int64
+		want bool
+	}{
+		{[]int64{2, 4, 1, 2}, true},
+		{[]int64{3, 7, 2, 5}, false},
+		{[]int64{-2, 7, -2, 5}, false},
+		{[]int64{2, 7, -2, 5}, false},
+	}
+	for _, tt := range tests {
+		t.Run(fmt.Sprint(tt.args), func(t *testing.T) {
+			fraction, _ := New(tt.args[0], tt.args[1])
+			otherFraction, _ := New(tt.args[2], tt.args[3])
+
+			if got := fraction.Equal(otherFraction); got != tt.want {
+				t.Errorf("Fraction.Equal() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFraction_IsZero(t *testing.T) {
+	fraction, _ := New(0, 100)
+
+	if !fraction.IsZero() {
+		t.Fatal("it should be zero")
+	}
+}
